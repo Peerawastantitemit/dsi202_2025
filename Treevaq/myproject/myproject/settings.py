@@ -1,12 +1,12 @@
-from pathlib import Path
+import os
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = 'django-insecure-i$%02d#lnd)7_96vn1ebvlnu%&*ck%+rihe9pa9=kz&559anob'
+SECRET_KEY = 'your-secret-key'  # เปลี่ยนเป็นคีย์ที่ปลอดภัย
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -16,6 +16,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'store',
+    'rest_framework',  # เพิ่มสำหรับ djangorestframework
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -50,12 +52,8 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'myproject_db',
-        'USER': 'myuser',
-        'PASSWORD': 'mypassword',
-        'HOST': 'db',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -80,10 +78,7 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / "static"]
-STATIC_ROOT = BASE_DIR / "staticfiles"
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

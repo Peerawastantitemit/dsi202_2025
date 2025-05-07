@@ -1,6 +1,0 @@
-Django==4.2
-psycopg2-binary==2.9.6
-django-extensions==3.2.3
-jupyterlab==4.0.2
-Pillow
-djangorestframework
