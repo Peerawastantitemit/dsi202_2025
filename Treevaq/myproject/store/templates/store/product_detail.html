@@ -1,13 +1,23 @@
 {% extends 'store/base.html' %}
 
 {% block content %}
-<h2>{{ product.name }}</h2>
-{% if product.image %}
-<img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 200px; height: auto;">
-{% endif %}
-<p><strong>ราคา:</strong> {{ product.price }} บาท</p>
-<p><strong>ลด CO2:</strong> {{ product.co2_reduction }} กก.</p>
-<p><strong>รายละเอียดเพิ่มเติม:</strong> ผลิตภัณฑ์นี้ช่วยลดคาร์บอนฟุตพริ้นท์และเป็นมิตรกับสิ่งแวดล้อม ทำจากวัสดุรีไซเคิล 100%.</p>
-<button>เพิ่มลงตะกร้า</button>
-<a href="{% url 'index' %}"><button>กลับ</button></a>
+<div class="container">
+    <h2 class="mb-4">{{ product.name }}</h2>
+    <div class="row">
+        <div class="col-md-4">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded">
+            {% else %}
+            <img src="{% static 'img/default.jpg' %}" alt="No Image" class="img-fluid rounded">
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            <p><strong>ราคา:</strong> {{ product.price }} บาท</p>
+            <p><strong>ลด CO2:</strong> {{ product.co2_reduction }} กก.</p>
+            <p><strong>รายละเอียดเพิ่มเติม:</strong> ผลิตภัณฑ์นี้ช่วยลดคาร์บอนฟุตพริ้นท์และเป็นมิตรกับสิ่งแวดล้อม ทำจากวัสดุรีไซเคิล 100%.</p>
+            <button class="btn btn-success">เพิ่มลงตะกร้า</button>
+            <a href="{% url 'index' %}" class="btn btn-secondary">กลับ</a>
+        </div>
+    </div>
+</div>
 {% endblock %}

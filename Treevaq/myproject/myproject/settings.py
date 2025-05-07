@@ -38,15 +38,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
+        'DIRS': [],  # ถ้าต้องการเพิ่มโฟลเดอร์เทมเพลตทั่วไป ให้ใส่ที่นี่
+        'APP_DIRS': True,  # ต้องเป็น True เพื่อให้ Django หาเทมเพลตใน <app>/templates/
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.media',  # เพิ่มนี้
+                'django.template.context_processors.media',
             ],
         },
     },

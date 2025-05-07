@@ -1,12 +1,15 @@
 {% extends 'store/base.html' %}
+{% load static %}
 
 {% block content %}
-<h2>สินค้ารักษ์โลก</h2>
+<h2 class="text-center mb-4">สินค้ารักษ์โลก</h2>
 <div class="product-list">
     {% for product in products %}
     <div class="product-card">
         {% if product.image %}
-        <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100px; height: auto;">
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid">
+        {% else %}
+        <img src="{% static 'img/default.jpg' %}" alt="No Image" class="img-fluid">
         {% endif %}
         <h3>{{ product.name }}</h3>
         <p>ราคา: {{ product.price }} บาท</p>
@@ -15,7 +18,7 @@
         <a href="{% url 'product_detail' product.id %}"><button>ดูสินค้าเพิ่มเติม</button></a>
     </div>
     {% empty %}
-    <p>ยังไม่มีสินค้า</p>
+    <p class="text-center">ยังไม่มีสินค้า</p>
     {% endfor %}
 </div>
 {% endblock %}
