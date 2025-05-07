@@ -11,7 +11,5 @@ fi
 cd /usr/src/app/myproject
 
 # Apply migrations
-python manage.py migrate --noinput
-
-# Run the server
-exec python manage.py runserver 0.0.0.0:8000
+python manage.py migrate
+exec gunicorn --bind 0.0.0.0:8000 myproject.wsgi:application

@@ -3,6 +3,5 @@ from .models import Product
 
 def index(request):
     products = Product.objects.all()
-    total_co2 = 0  # ตัวอย่างการคำนวณ CO2
-    # ถ้ามีตะกร้า จะคำนวณจากสินค้าที่เลือก
+    total_co2 = sum(product.co2_reduction for product in products)
     return render(request, 'store/index.html', {'products': products, 'total_co2': total_co2})
