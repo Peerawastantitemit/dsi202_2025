@@ -1,4 +1,3 @@
-# Dockerfile
 FROM python:3.9-slim
 
 # Install system dependencies
@@ -7,23 +6,23 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Create a directory for our code
+# Create working directory
 WORKDIR /usr/src/app
 
-# Copy requirements first, for caching purposes
+# Copy requirements.txt
 COPY requirements.txt .
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of our code into the container
+# Copy the rest of the code
 COPY . .
 
-# Make sure our entrypoint script is executable
+# Make entrypoint executable
 RUN chmod +x entrypoint.sh
 
-# Expose port 8000 for Django
+# Expose port
 EXPOSE 8000
 
-# Default command
+# Run entrypoint
 CMD ["/bin/bash", "entrypoint.sh"]

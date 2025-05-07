@@ -10,4 +10,5 @@ services:
       - "8000:8000"
     environment:
       - PYTHONUNBUFFERED=1
-    tty: true  # ช่วยให้ container ไม่หลุด
+      - DJANGO_SETTINGS_MODULE=myproject.settings  # เพิ่มเพื่อชี้ settings
+    tty: true
