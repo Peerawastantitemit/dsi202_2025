@@ -14,4 +14,9 @@
     <p>ยังไม่มีสินค้า</p>
     {% endfor %}
 </div>
+{% if total_co2 %}
+<div class="co2-summary">
+    <h3>ยินดีด้วย! คุณช่วยลด CO2 ได้ {{ total_co2 }} กก.</h3>
+</div>
+{% endif %}
 {% endblock %}
