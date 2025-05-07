@@ -1,7 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Product
 
 def index(request):
     products = Product.objects.all()
-    total_co2 = sum(product.co2_reduction for product in products)
-    return render(request, 'store/index.html', {'products': products, 'total_co2': total_co2})
+    return render(request, 'store/index.html', {'products': products})
+
+def product_detail(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    return render(request, 'store/product_detail.html', {'product': product})  # ตรวจสอบชื่อเทมเพลต

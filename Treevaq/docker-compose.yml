@@ -4,6 +4,7 @@ services:
     container_name: Treevaq
     volumes:
       - .:/usr/src/app
+      - ./media:/usr/src/app/media  # เพิ่มนี้
     ports:
       - "8000:8000"
     environment:

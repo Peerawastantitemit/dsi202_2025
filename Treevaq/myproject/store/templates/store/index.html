@@ -1,25 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Treevaq - สินค้ารักษ์โลก</title>
-</head>
-<body>
-    <h1>ยินดีต้อนรับสู่ Treevaq</h1>
-    <h2>สินค้ารักษ์โลก</h2>
-    <ul>
+{% extends 'store/base.html' %}
+
+{% block content %}
+<h2>สินค้ารักษ์โลก</h2>
+<div class="product-list">
     {% for product in products %}
-        <li>
-            <h3>{{ product.name }}</h3>
-            <p>ราคา: {{ product.price }} บาท</p>
-            <p>{{ product.description }}</p>
-            {% if product.image %}
-                <img src="{{ product.image.url }}" alt="{{ product.name }}" width="200">
-            {% endif %}
-        </li>
+    <div class="product-card">
+        {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100px; height: auto;">
+        {% endif %}
+        <h3>{{ product.name }}</h3>
+        <p>ราคา: {{ product.price }} บาท</p>
+        <p>ลด CO2: {{ product.co2_reduction }} กก.</p>
+        <button>เพิ่มลงตะกร้า</button>
+        <a href="{% url 'product_detail' product.id %}"><button>ดูสินค้าเพิ่มเติม</button></a>
+    </div>
     {% empty %}
-        <p>ยังไม่มีสินค้าในร้าน</p>
+    <p>ยังไม่มีสินค้า</p>
     {% endfor %}
-    </ul>
-    <h3>ผลกระทบ CO2: {{ total_co2 }} kg (ลดลงจากการเลือกสินค้ารักษ์โลก)</h3>
-</body>
-</html>
+</div>
+{% endblock %}
