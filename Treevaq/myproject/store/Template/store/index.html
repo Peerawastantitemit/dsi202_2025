@@ -1,0 +1,17 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<h2>สินค้ารักษ์โลก</h2>
+<div class="product-list">
+    {% for product in products %}
+    <div class="product-card">
+        <h3>{{ product.name }}</h3>
+        <p>ราคา: {{ product.price }} บาท</p>
+        <p>ลด CO2: {{ product.co2_reduction }} กก.</p>
+        <button>เพิ่มลงตะกร้า</button>
+    </div>
+    {% empty %}
+    <p>ยังไม่มีสินค้า</p>
+    {% endfor %}
+</div>
+{% endblock %}
