@@ -23,7 +23,7 @@ def add_to_cart(request, pk):
         cart_item.quantity += 1
         cart_item.save()
     messages.success(request, f"เพิ่ม {product.name} ลงตะกร้าแล้ว!")
-    return redirect('cart')
+    return redirect('cart')  # เปลี่ยนไปหน้า /cart/ แทนการ redirect กลับ
 
 @login_required
 def remove_from_cart(request, pk):
@@ -71,3 +71,27 @@ def register(request):
     else:
         form = UserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
+
+def about(request):
+    return render(request, 'store/about.html')
+
+@login_required
+def get_cart_items(request):
+    cart_items = Cart.objects.filter(user=request.user)
+    data = {
+        'cart_items': []
+    }
+    total = 0
+    for item in cart_items:
+        item.total_price = item.product.price * item.quantity
+        total += item.total_price
+        data['cart_items'].append({
+            'id': item.id,
+            'product': {
+                'name': item.product.name,
+                'image': item.product.image.url if item.product.image else '/static/img/default.jpg',
+            },
+            'quantity': item.quantity,
+            'total_price': item.total_price,
+        })
+    return JsonResponse(data)

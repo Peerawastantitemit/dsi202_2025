@@ -25,7 +25,7 @@
         <div class="text-center mt-4">
             <h3>ยอดรวมทั้งหมด: {{ total }} บาท 💰</h3>
             <p class="text-success">ขอบคุณที่สั่งซื้อกับเรา! 🌱 การสั่งซื้อของคุณได้รับการยืนยันแล้ว</p>
-            <a href="{% url 'index' %}" class="btn btn-primary mt-2">กลับไปช็อปต่อ 🛒</a>
+            <button onclick="openCartSidebar()" class="btn btn-primary mt-2">กลับไปช็อปต่อ 🛒</button>
         </div>
         {% else %}
         <p class="text-center">ไม่มีสินค้าในตะกร้า 😢</p>
