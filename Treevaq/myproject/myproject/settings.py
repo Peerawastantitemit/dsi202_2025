@@ -15,8 +15,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'store',
-    'rest_framework',  # เพิ่มสำหรับ djangorestframework
+    'store', 
+    'rest_framework',
     'django_extensions',
 ]
 
@@ -38,8 +38,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],  # ถ้าต้องการเพิ่มโฟลเดอร์เทมเพลตทั่วไป ให้ใส่ที่นี่
-        'APP_DIRS': True,  # ต้องเป็น True เพื่อให้ Django หาเทมเพลตใน <app>/templates/
+        'DIRS': [], 
+        'APP_DIRS': True,  
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -82,7 +82,6 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

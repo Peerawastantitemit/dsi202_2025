@@ -3,19 +3,25 @@
 
 {% block content %}
 <h2 class="text-center mb-4">สินค้ารักษ์โลก</h2>
-<div class="product-list">
+<div class="row row-cols-1 row-cols-md-3 g-4">
     {% for product in products %}
-    <div class="product-card">
-        {% if product.image %}
-        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid">
-        {% else %}
-        <img src="{% static 'img/default.jpg' %}" alt="No Image" class="img-fluid">
-        {% endif %}
-        <h3>{{ product.name }}</h3>
-        <p>ราคา: {{ product.price }} บาท</p>
-        <p>ลด CO2: {{ product.co2_reduction }} กก.</p>
-        <button>เพิ่มลงตะกร้า</button>
-        <a href="{% url 'product_detail' product.id %}"><button>ดูสินค้าเพิ่มเติม</button></a>
+    <div class="col">
+        <div class="card h-100">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="card-img-top img-fluid" style="object-fit: cover; height: 200px;">
+            {% else %}
+            <img src="{% static 'img/default.jpg' %}" alt="No Image" class="card-img-top img-fluid" style="object-fit: cover; height: 200px;">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text">ราคา: {{ product.price }} บาท</p>
+                <p class="card-text">ลด CO2: {{ product.co2_reduction }} กก.</p>
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-success w-100 mb-2">เพิ่มลงตะกร้า</button>
+                <a href="{% url 'product_detail' product.id %}" class="btn btn-primary w-100">ดูสินค้าเพิ่มเติม</a>
+            </div>
+        </div>
     </div>
     {% empty %}
     <p class="text-center">ยังไม่มีสินค้า</p>

@@ -3,8 +3,8 @@ services:
     build: .
     container_name: Treevaq
     volumes:
-      - .:/usr/src/app
-      - ./media:/usr/src/app/media  # เพิ่มนี้
+      - .:/usr/src/app  # ต้องมีนี้เพื่อ sync ไฟล์
+      - ./media:/usr/src/app/media
     ports:
       - "8000:8000"
     environment:

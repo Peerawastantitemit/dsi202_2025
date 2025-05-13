@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls),  # เปลี่ยนจาก 'tadmin/' เป็น 'admin/'
+    path('admin/', admin.site.urls),
     path('', include('store.urls')),
     path('api/', include('rest_framework.urls')),
 ]
