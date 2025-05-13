@@ -1,3 +1,4 @@
+version: '3.8'
 services:
   web:
     build: .
@@ -12,16 +13,16 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
       - DJANGO_SETTINGS_MODULE=myproject.settings
+    depends_on:
+      - db
     tty: true
-
   db:
-    image: postgres:13
+    image: postgres:17
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: mypassword
       POSTGRES_DB: mydatabase
-
 volumes:
   postgres_data:

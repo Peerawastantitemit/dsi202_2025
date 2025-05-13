@@ -1,3 +1,4 @@
+import os
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Product, Cart
@@ -8,11 +9,18 @@ from django.contrib.auth.decorators import login_required
 
 
 def index(request):
-    products = Product.objects.all()
+    # รับคำค้นจาก query string
+    query = request.GET.get('q', '').strip()
+    if query:
+        products = Product.objects.filter(name__icontains=query) | Product.objects.filter(description__icontains=query)
+    else:
+        products = Product.objects.all()
+    
     cart_items = Cart.objects.filter(user=request.user) if request.user.is_authenticated else []
     for item in cart_items:
         item.total_price = item.product.price * item.quantity
-    return render(request, 'store/index.html', {'products': products, 'cart_items': cart_items})
+    
+    return render(request, 'store/index.html', {'products': products, 'cart_items': cart_items, 'query': query})
 
 def product_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)

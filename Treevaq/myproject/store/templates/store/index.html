@@ -3,6 +3,16 @@
 
 {% block content %}
 <div class="container py-4">
+    <!-- ฟอร์มค้นหา -->
+    <div class="row mb-4">
+        <div class="col-md-6 mx-auto">
+            <form method="GET" action="{% url 'index' %}" class="d-flex">
+                <input type="text" name="q" class="form-control me-2" placeholder="ค้นหาสินค้า..." value="{{ query|default_if_none:'' }}">
+                <button type="submit" class="btn btn-success">ค้นหา 🔍</button>
+            </form>
+        </div>
+    </div>
+
     <h2 class="text-center mb-4">สินค้าทั้งหมด 🌿</h2>
     <div class="row">
         {% for product in products %}
