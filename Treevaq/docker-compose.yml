@@ -1,9 +1,11 @@
 services:
   web:
     build: .
+    env_file:
+      - .env
     container_name: Treevaq
     volumes:
-      - .:/usr/src/app  # ต้องมีนี้เพื่อ sync ไฟล์
+      - .:/usr/src/app
       - ./media:/usr/src/app/media
     ports:
       - "8000:8000"
@@ -11,3 +13,15 @@ services:
       - PYTHONUNBUFFERED=1
       - DJANGO_SETTINGS_MODULE=myproject.settings
     tty: true
+
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
+
+volumes:
+  postgres_data:

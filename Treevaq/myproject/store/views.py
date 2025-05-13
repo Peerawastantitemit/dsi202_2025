@@ -3,6 +3,9 @@ from django.contrib.auth.decorators import login_required
 from .models import Product, Cart
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+
+
 
 def index(request):
     products = Product.objects.all()
