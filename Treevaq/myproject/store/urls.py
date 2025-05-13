@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -9,4 +10,7 @@ urlpatterns = [
     path('update_cart_quantity/<int:pk>/<str:action>/', views.update_cart_quantity, name='update_cart_quantity'),
     path('cart/', views.cart, name='cart'),
     path('confirm_cart/', views.confirm_cart, name='confirm_cart'),
+    path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
+    path('register/', views.register, name='register'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 ]

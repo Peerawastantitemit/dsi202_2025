@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Product, Cart
 from django.contrib import messages
+from django.contrib.auth.forms import UserCreationForm
 
 def index(request):
     products = Product.objects.all()
@@ -51,10 +52,22 @@ def cart(request):
 
 @login_required
 def confirm_cart(request):
+    if not request.user.is_authenticated:
+        return redirect('login')  # ถ้าไม่ล็อกอินให้เด้งไปหน้า login
     cart_items = Cart.objects.filter(user=request.user)
     total = sum(item.product.price * item.quantity for item in cart_items)
     for item in cart_items:
         item.total_price = item.product.price * item.quantity
-    # ลบสินค้าจากตะกร้าหลังยืนยัน (ชั่วคราว)
-    Cart.objects.filter(user=request.user).delete()
+    Cart.objects.filter(user=request.user).delete()  # ลบสินค้าจากตะกร้าหลังยืนยัน
     return render(request, 'store/order_confirmation.html', {'cart_items': cart_items, 'total': total})
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'สมัครสมาชิกสำเร็จ! กรุณาล็อกอิน')
+            return redirect('login')
+    else:
+        form = UserCreationForm()
+    return render(request, 'registration/register.html', {'form': form})

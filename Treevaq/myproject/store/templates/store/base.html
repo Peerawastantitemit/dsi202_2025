@@ -25,9 +25,19 @@
                     <li class="nav-item">
                         <a class="nav-link text-white" href="#">สินค้า</a>
                     </li>
+                    <!-- ลบส่วนเกี่ยวกับเราออกจาก navbar -->
+                    {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="#">เกี่ยวกับเรา</a>
+                        <a class="nav-link text-white" href="{% url 'logout' %}">ออกจากระบบ</a>
                     </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'login' %}">ล็อกอิน</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'register' %}">สมัครสมาชิก</a>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -40,6 +50,8 @@
 
     <footer class="bg-success text-white text-center py-3 mt-4">
         <p>© 2025 Treevaq 🌱 - ช่วยโลกไปด้วยกัน</p>
+        <!-- เพิ่มเกี่ยวกับเราใน footer -->
+        <p><a href="#" class="text-white text-decoration-none auth-link">เกี่ยวกับเรา 🌿</a></p>
     </footer>
 </body>
 </html>
