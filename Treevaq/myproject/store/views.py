@@ -4,12 +4,9 @@ from django.contrib.auth.decorators import login_required
 from .models import Product, Cart
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.decorators import login_required
-
-
+from django.http import JsonResponse
 
 def index(request):
-    # รับคำค้นจาก query string
     query = request.GET.get('q', '').strip()
     if query:
         products = Product.objects.filter(name__icontains=query) | Product.objects.filter(description__icontains=query)
@@ -34,7 +31,7 @@ def add_to_cart(request, pk):
         cart_item.quantity += 1
         cart_item.save()
     messages.success(request, f"เพิ่ม {product.name} ลงตะกร้าแล้ว!")
-    return redirect('cart')  # เปลี่ยนไปหน้า /cart/ แทนการ redirect กลับ
+    return redirect('cart')
 
 @login_required
 def remove_from_cart(request, pk):
@@ -64,12 +61,12 @@ def cart(request):
 @login_required
 def confirm_cart(request):
     if not request.user.is_authenticated:
-        return redirect('login')  # ถ้าไม่ล็อกอินให้เด้งไปหน้า login
+        return redirect('login')
     cart_items = Cart.objects.filter(user=request.user)
     total = sum(item.product.price * item.quantity for item in cart_items)
     for item in cart_items:
         item.total_price = item.product.price * item.quantity
-    Cart.objects.filter(user=request.user).delete()  # ลบสินค้าจากตะกร้าหลังยืนยัน
+    Cart.objects.filter(user=request.user).delete()
     return render(request, 'store/order_confirmation.html', {'cart_items': cart_items, 'total': total})
 
 def register(request):
@@ -106,3 +103,7 @@ def get_cart_items(request):
             'total_price': item.total_price,
         })
     return JsonResponse(data)
+
+@login_required
+def profile(request):
+    return render(request, 'store/profile.html')
