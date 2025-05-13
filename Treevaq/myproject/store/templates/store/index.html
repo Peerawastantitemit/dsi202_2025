@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-<h2 class="text-center mb-4">สินค้ารักษ์โลก</h2>
+<h2 class="text-center mb-4">สินค้ารักษ์โลก 🌿</h2>
 <div class="row row-cols-1 row-cols-md-3 g-4">
     {% for product in products %}
     <div class="col">
@@ -12,19 +12,49 @@
             {% else %}
             <img src="{% static 'img/default.jpg' %}" alt="No Image" class="card-img-top img-fluid" style="object-fit: cover; height: 200px;">
             {% endif %}
-            <div class="card-body">
+            <div class="card-body text-center">
                 <h5 class="card-title">{{ product.name }}</h5>
                 <p class="card-text">ราคา: {{ product.price }} บาท</p>
-                <p class="card-text">ลด CO2: {{ product.co2_reduction }} กก.</p>
+                <p class="card-text">ลด CO2: {{ product.co2_reduction }} กก. 🌍</p>
             </div>
-            <div class="card-footer">
-                <button class="btn btn-success w-100 mb-2">เพิ่มลงตะกร้า</button>
-                <a href="{% url 'product_detail' product.id %}" class="btn btn-primary w-100">ดูสินค้าเพิ่มเติม</a>
+            <div class="card-footer text-center">
+                <a href="{% url 'add_to_cart' product.id %}" class="btn btn-success w-100 mb-2">เพิ่มลงตะกร้า 🛒</a>
+                <a href="{% url 'product_detail' product.id %}" class="btn btn-primary w-100">ดูสินค้าเพิ่มเติม 🔍</a>
             </div>
         </div>
     </div>
     {% empty %}
-    <p class="text-center">ยังไม่มีสินค้า</p>
+    <p class="text-center">ยังไม่มีสินค้า 😢</p>
     {% endfor %}
 </div>
+
+{% if cart_items %}
+<h3 class="mt-4">ตะกร้าสินค้า 🛍️</h3>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for item in cart_items %}
+    <div class="col">
+        <div class="card h-100">
+            {% if item.product.image %}
+            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="card-img-top img-fluid" style="object-fit: cover; height: 200px;">
+            {% else %}
+            <img src="{% static 'img/default.jpg' %}" alt="No Image" class="card-img-top img-fluid" style="object-fit: cover; height: 200px;">
+            {% endif %}
+            <div class="card-body text-center">
+                <h5 class="card-title">{{ item.product.name }} (x{{ item.quantity }})</h5>
+                <p class="card-text">ราคา: {{ item.total_price }} บาท</p>
+                <p class="card-text">ลด CO2: {{ item.product.co2_reduction }} กก. 🌍</p>
+            </div>
+            <div class="card-footer text-center">
+                <a href="{% url 'update_cart_quantity' item.id 'increase' %}" class="btn btn-info btn-sm">➕</a>
+                <a href="{% url 'update_cart_quantity' item.id 'decrease' %}" class="btn btn-info btn-sm">➖</a>
+                <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger btn-sm">🗑️</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div class="text-center mt-3">
+    <a href="{% url 'confirm_cart' %}" class="btn btn-success">ยืนยันสินค้า ✅</a>
+</div>
+{% endif %}
 {% endblock %}

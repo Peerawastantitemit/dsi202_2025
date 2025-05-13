@@ -1,81 +1,81 @@
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f8f9fa;
-    color: #2e4a2e;
-    margin: 0;
-    padding: 0;
-}
-
-.product-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 20px 0;
-}
-
-.product-card {
-    background-color: #ffffff;
-    border: 1px solid #dee2e6;
-    border-radius: 10px;
-    padding: 15px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
-}
-
-.product-card:hover {
-    transform: translateY(-5px);
-}
-
-.product-card img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 5px;
-    margin-bottom: 10px;
-}
-
-.product-card h3 {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-    color: #2e4a2e;
-}
-
-.product-card p {
-    margin: 5px 0;
-    color: #555;
-}
-
-.product-card button, .product-card a button {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 100%;
-    margin: 5px 0;
-    text-align: center;
-    text-decoration: none;
-}
-
-.product-card button:hover, .product-card a button:hover {
-    background-color: #218838;
-}
-
-a button {
-    text-decoration: none !important;
-}
-
-body {
-    font-family: 'Roboto', sans-serif;
-}
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f8f9fa;
-    color: #2e4a2e;
+    font-family: 'Kanit', sans-serif; /* ใช้ฟอนต์ไทยสวย ๆ */
+    background-color: #e6f0e6; /* พื้นหลังสีเขียวอ่อน */
+    color: #2e4a2e; /* สีตัวอักษรเขียวเข้ม */
+}
+
+header {
+    background: linear-gradient(135deg, #28a745, #6abf69); /* ไล่สีเขียว */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2, h3 {
+    font-weight: 600;
+    color: #1a3c1a; /* สีเขียวเข้มสำหรับหัวข้อ */
+}
+
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px); /* เอฟเฟกต์ยกขึ้นเมื่อชี้ */
+}
+
+.card-img-top {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.btn-primary {
+    background-color: #6abf69;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-weight: 500;
+}
+
+.btn-primary:hover {
+    background-color: #5aa85a;
+}
+
+.btn-info {
+    background-color: #17a2b8;
+    border: none;
+    border-radius: 5px;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border: none;
+    border-radius: 5px;
+}
+
+footer {
+    background: linear-gradient(135deg, #28a745, #6abf69);
+    position: relative;
+    bottom: 0;
+    width: 100%;
 }

@@ -1,0 +1,33 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="text-center mb-4">ยืนยันตะกร้าสินค้า 🛍️</h2>
+    <div class="row">
+        {% for item in cart_items %}
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                {% if item.product.image %}
+                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="card-img-top img-fluid" style="object-fit: cover; height: 200px;">
+                {% else %}
+                <img src="{% static 'img/default.jpg' %}" alt="No Image" class="card-img-top img-fluid" style="object-fit: cover; height: 200px;">
+                {% endif %}
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ item.product.name }}</h5>
+                    <p class="card-text">ราคา: {{ item.product.price }} บาท x {{ item.quantity }}</p>
+                    <p class="card-text">ลด CO2: {{ item.product.co2_reduction }} กก. 🌍</p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center">ตะกร้าว่างเปล่า 😢</p>
+        {% endfor %}
+    </div>
+    <h3 class="mt-4 text-center">ยอดรวม: {{ total }} บาท 💰</h3>
+    <div class="text-center">
+        <a href="{% url 'index' %}" class="btn btn-primary mb-2">ช็อปต่อ 🛒</a>
+        <button class="btn btn-success">ยืนยันการสั่งซื้อ ✅</button>
+    </div>
+</div>
+{% endblock %}

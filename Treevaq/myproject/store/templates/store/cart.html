@@ -1,0 +1,41 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="text-center mb-4">ตะกร้าสินค้า 🛍️</h2>
+    <div class="row">
+        {% if cart_items %}
+        {% for item in cart_items %}
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                {% if item.product.image %}
+                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="card-img-top img-fluid" style="object-fit: cover; height: 200px;">
+                {% else %}
+                <img src="{% static 'img/default.jpg' %}" alt="No Image" class="card-img-top img-fluid" style="object-fit: cover; height: 200px;">
+                {% endif %}
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ item.product.name }} (x{{ item.quantity }})</h5>
+                    <p class="card-text">ราคา: {{ item.total_price }} บาท 💸</p>
+                    <p class="card-text">ลด CO2: {{ item.product.co2_reduction }} กก. 🌍</p>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{% url 'update_cart_quantity' item.id 'increase' %}" class="btn btn-info btn-sm">➕</a>
+                    <a href="{% url 'update_cart_quantity' item.id 'decrease' %}" class="btn btn-info btn-sm">➖</a>
+                    <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger btn-sm">🗑️</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="text-center mt-4">
+            <h3>ยอดรวม: {{ total }} บาท 💰</h3>
+            <a href="{% url 'confirm_cart' %}" class="btn btn-success mt-2">ยืนยันการสั่งซื้อ ✅</a>
+            <a href="{% url 'index' %}" class="btn btn-primary mt-2">ช็อปต่อ 🛒</a>
+        </div>
+        {% else %}
+        <p class="text-center">ตะกร้าว่างเปล่า 😢</p>
+        <a href="{% url 'index' %}" class="btn btn-primary mt-2">ไปช็อปสินค้า 🛒</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
