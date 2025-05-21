@@ -2,24 +2,128 @@
 {% load static %}
 
 {% block content %}
-<div class="container py-4">
-    <h2 class="text-center mb-4">สมัครสมาชิก 📝</h2>
-    <div class="card auth-card">
-        <div class="card-body">
-            <form method="POST">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <div class="text-center">
-                    <button type="submit" class="btn btn-success">สมัครสมาชิก 🚀</button>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card auth-card shadow-sm">
+                <div class="card-header bg-white border-0 text-center py-4">
+                    <h2 class="mb-0">สมัครสมาชิกใหม่</h2>
+                    <img src="{% static 'images/register-icon.png' %}" alt="Register" class="mt-3" width="80">
                 </div>
-            </form>
-            <p class="text-center mt-3">
-                มีบัญชีแล้ว? <a href="{% url 'login' %}" class="text-success">ล็อกอิน</a>
-            </p>
-            <p class="text-center">
-                หรือ <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-outline-primary">สมัครด้วย Google</a>
-            </p>
+                <div class="card-body px-5 py-4">
+                    {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <strong>โปรดแก้ไขข้อผิดพลาดต่อไปนี้:</strong>
+                        <ul class="mb-0">
+                            {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                    <form method="POST" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="id_username" class="form-label">ชื่อผู้ใช้</label>
+                            <input type="text" name="username" class="form-control" id="id_username" required>
+                            <div class="form-text">ต้องมีความยาวระหว่าง 4-20 ตัวอักษร</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_password1" class="form-label">รหัสผ่าน</label>
+                            <input type="password" name="password1" class="form-control" id="id_password1" required>
+                            <div class="form-text">ต้องมีอย่างน้อย 8 ตัวอักษร</div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="id_password2" class="form-label">ยืนยันรหัสผ่าน</label>
+                            <input type="password" name="password2" class="form-control" id="id_password2" required>
+                        </div>
+                        
+                        <div class="d-grid gap-2 mb-4">
+                            <button type="submit" class="btn btn-success btn-lg py-2">
+                                <i class="fas fa-user-plus me-2"></i> สมัครสมาชิก
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="text-center mb-3">
+                        <p class="mb-2">มีบัญชีอยู่แล้ว?</p>
+                        <a href="{% url 'login' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-sign-in-alt me-2"></i> เข้าสู่ระบบ
+                        </a>
+                    </div>
+                    
+                    <div class="divider my-4">หรือ</div>
+                    
+                    <div class="text-center">
+                        <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-outline-danger">
+                            <img src="{% static 'images/google-icon.png' %}" alt="Google" width="20" class="me-2">
+                            สมัครด้วย Google
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .auth-card {
+        border-radius: 12px;
+        border: none;
+    }
+    
+    .card-header {
+        border-bottom: 1px solid rgba(0,0,0,.1);
+    }
+    
+    .divider {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        color: #6c757d;
+    }
+    
+    .divider::before,
+    .divider::after {
+        content: "";
+        flex: 1;
+        border-bottom: 1px solid #dee2e6;
+    }
+    
+    .divider::before {
+        margin-right: 1rem;
+    }
+    
+    .divider::after {
+        margin-left: 1rem;
+    }
+    
+    .form-control {
+        padding: 10px 15px;
+        border-radius: 8px;
+    }
+    
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+    
+    .btn-outline-danger {
+        border-color: #dc3545;
+        color: #dc3545;
+    }
+    
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        color: white;
+    }
+</style>
 {% endblock %}

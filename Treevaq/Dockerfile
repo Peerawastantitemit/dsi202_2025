@@ -1,27 +1,19 @@
 FROM python:3.10-slim
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 RUN apt-get update && apt-get install -y \
-    git \
     build-essential \
     libpq-dev \
     libjpeg-dev \
     zlib1g-dev \
-    libpng-dev \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
-
-RUN pip install --upgrade pip \
-    && pip install --no-cache-dir -r requirements.txt
-
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
-
-RUN chmod +x entrypoint.sh
+RUN chmod +x entrypoint.sh  # Ensure entrypoint.sh is executable
 
 EXPOSE 8000
 
