@@ -4,21 +4,23 @@
 {% block content %}
 <div class="container py-4">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6">
             {% if product.image %}
-            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded" style="width: 100%; height: auto;">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid" style="max-height: 400px; object-fit: cover;">
             {% else %}
-            <img src="{% static 'img/default.jpg' %}" alt="No Image" class="img-fluid rounded" style="width: 100%; height: auto;">
+            <img src="{% static 'img/default.jpg' %}" alt="No Image" class="img-fluid" style="max-height: 400px; object-fit: cover;">
             {% endif %}
         </div>
-        <div class="col-md-8">
+        <div class="col-md-6">
             <h2>{{ product.name }} 🌿</h2>
-            <p><strong>ราคา:</strong> {{ product.price }} บาท 💸</p>
-            <p><strong>ลด CO2:</strong> {{ product.co2_reduction }} กก. 🌍</p>
-            <p><strong>รายละเอียดเพิ่มเติม:</strong> ผลิตภัณฑ์นี้ช่วยลดคาร์บอนฟุตพริ้นท์และเป็นมิตรกับสิ่งแวดล้อม ทำจากวัสดุรีไซเคิล 100%. ♻️</p>
-            <a href="{% url 'add_to_cart' product.id %}" class="btn btn-success mb-2">เพิ่มลงตะกร้า 🛒</a>
-            <a href="{% url 'index' %}" class="btn btn-primary">กลับ 🔙</a>
+            <p>ราคา: {{ product.price }} บาท 💸</p>
+            <p>ลด CO2: {{ product.co2_reduction }} กก. 🌍</p>
+            <p>รายละเอียด: {{ product.description|default:"ไม่มีรายละเอียด" }}</p>
+            <a href="{% url 'store:add_to_cart' product.id %}" class="btn btn-success">เพิ่มลงตะกร้า 🛒</a>
         </div>
+    </div>
+    <div class="text-center mt-4">
+        <a href="{% url 'store:index' %}" class="btn btn-primary">กลับไปช็อปต่อ 🛒</a>
     </div>
 </div>
 {% endblock %}

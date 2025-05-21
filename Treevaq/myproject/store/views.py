@@ -5,6 +5,7 @@ from .models import Product, Cart
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.http import JsonResponse
+from django.contrib.auth import login
 
 def index(request):
     query = request.GET.get('q', '').strip()
@@ -31,7 +32,7 @@ def add_to_cart(request, pk):
         cart_item.quantity += 1
         cart_item.save()
     messages.success(request, f"เพิ่ม {product.name} ลงตะกร้าแล้ว!")
-    return redirect('cart')
+    return redirect('store:cart')  # Note the namespace 'store:cart'
 
 @login_required
 def remove_from_cart(request, pk):
@@ -75,16 +76,17 @@ def confirm_cart(request):
     Cart.objects.filter(user=request.user).delete()
     return render(request, 'store/order_confirmation.html', {'cart_items': cart_items, 'total': total})
 
+
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, 'สมัครสมาชิกสำเร็จ! กรุณาล็อกอิน')
-            return redirect('login')
+            user = form.save()
+            login(request, user)
+            return redirect('store:index')
     else:
         form = UserCreationForm()
-    return render(request, 'registration/register.html', {'form': form})
+    return render(request, 'store/register.html', {'form': form})
 
 def about(request):
     return render(request, 'store/about.html')
@@ -116,6 +118,8 @@ def get_cart_items(request):
 
 @login_required
 def profile(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
     return render(request, 'store/profile.html')
 
 def product_list(request):

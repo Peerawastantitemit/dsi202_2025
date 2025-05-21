@@ -20,22 +20,21 @@
                     <p class="card-text">ลด CO2: {{ item.product.co2_reduction }} กก. 🌍</p>
                 </div>
                 <div class="card-footer text-center">
-                    <a href="{% url 'update_cart_quantity' item.id 'increase' %}" class="btn btn-info btn-sm">➕</a>
-                    <a href="{% url 'update_cart_quantity' item.id 'decrease' %}" class="btn btn-info btn-sm">➖</a>
-                    <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger btn-sm">🗑️</a>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-        <div class="text-center mt-4">
-            <h3>ยอดรวม: {{ total }} บาท 💰</h3>
-            <a href="{% url 'confirm_cart' %}" class="btn btn-success mt-2">ยืนยันการสั่งซื้อ ✅</a>
-            <a href="{% url 'index' %}" class="btn btn-primary mt-2">กลับไปช็อปต่อ 🛒</a>
-        </div>
-        {% else %}
-        <p class="text-center">ตะกร้าว่างเปล่า 😢</p>
-        <a href="{% url 'index' %}" class="btn btn-primary mt-2">ไปช็อปสินค้า 🛒</a>
-        {% endif %}
+    <a href="{% url 'store:update_cart_quantity' item.id 'increase' %}" class="btn btn-info btn-sm">➕</a>
+    <a href="{% url 'store:update_cart_quantity' item.id 'decrease' %}" class="btn btn-info btn-sm">➖</a>
+    <a href="{% url 'store:remove_from_cart' item.id %}" class="btn btn-danger btn-sm">🗑️</a>
+</div>
+</div>
+{% endfor %}
+<div class="text-center mt-4">
+    <h3>ยอดรวม: {{ total }} บาท 💰</h3>
+    <a href="{% url 'store:confirm_cart' %}" class="btn btn-success mt-2">ยืนยันการสั่งซื้อ ✅</a>
+    <a href="{% url 'store:index' %}" class="btn btn-primary mt-2">กลับไปช็อปต่อ 🛒</a>
+</div>
+{% else %}
+<p class="text-center">ตะกร้าว่างเปล่า 😢</p>
+<a href="{% url 'store:index' %}" class="btn btn-primary mt-2">ไปช็อปสินค้า 🛒</a>
+{% endif %}
     </div>
 </div>
 {% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="text-center mb-4">สินค้าทั้งหมด 🌿</h2>
+    <div class="row">
+        {% for product in products %}
+        <div class="col-md-4 mb-3">
+            <div class="card product-card transition hover-shadow">
+                {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="card-img-top img-fluid" style="object-fit: cover; height: 200px;">
+                {% else %}
+                <img src="{% static 'img/default.jpg' %}" alt="No Image" class="card-img-top img-fluid" style="object-fit: cover; height: 200px;">
+                {% endif %}
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">ราคา: {{ product.price }} บาท 💸</p>
+                    <p class="card-text">ลด CO2: {{ product.co2_reduction }} กก. 🌍</p>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{% url 'store:add_to_cart' product.id %}" class="btn btn-success">เพิ่มลงตะกร้า 🛒</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center">ไม่มีสินค้าในขณะนี้ 😢</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

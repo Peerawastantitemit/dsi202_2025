@@ -1,0 +1,11 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4 text-center">
+    <h2>ยืนยันการสั่งซื้อเรียบร้อย ✅</h2>
+    <p>ขอบคุณที่เลือกซื้อสินค้ากับ Treevaq 🌱</p>
+    <p>เราจะดำเนินการจัดส่งให้คุณโดยเร็วที่สุด 🚚</p>
+    <a href="{% url 'store:index' %}" class="btn btn-primary mt-3">กลับไปช็อปต่อ 🛒</a>
+</div>
+{% endblock %}
