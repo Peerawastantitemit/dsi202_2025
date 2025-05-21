@@ -18,4 +18,5 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('cart/get_cart_items/', views.get_cart_items, name='get_cart_items'),
+    path('products/', views.product_list, name='products'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -53,10 +53,16 @@ def update_cart_quantity(request, pk, action):
 @login_required
 def cart(request):
     cart_items = Cart.objects.filter(user=request.user)
-    total = sum(item.product.price * item.quantity for item in cart_items)
+    total = sum(
+        float(item.product.price) * int(item.quantity) 
+        for item in cart_items
+    )
     for item in cart_items:
-        item.total_price = item.product.price * item.quantity
-    return render(request, 'store/cart.html', {'cart_items': cart_items, 'total': total})
+        item.total_price = float(item.product.price) * int(item.quantity)
+    return render(request, 'store/cart.html', {
+        'cart_items': cart_items, 
+        'total': total
+    })
 
 @login_required
 def confirm_cart(request):
@@ -89,21 +95,29 @@ def get_cart_items(request):
     data = {
         'cart_items': []
     }
-    total = 0
     for item in cart_items:
-        item.total_price = item.product.price * item.quantity
-        total += item.total_price
+        # Ensure numeric values by converting to float
+        price = float(item.product.price) if item.product.price else 0.0
+        quantity = int(item.quantity) if item.quantity else 0
+        total_price = price * quantity
+        
         data['cart_items'].append({
             'id': item.id,
             'product': {
+                'id': item.product.id,
                 'name': item.product.name,
-                'image': item.product.image.url if item.product.image else '/static/img/default.jpg',
+                'price': price,  # Ensure this is numeric
+                'image': item.product.image.url if item.product.image else '',
             },
-            'quantity': item.quantity,
-            'total_price': item.total_price,
+            'quantity': quantity,  # Ensure this is numeric
+            'total_price': total_price,
         })
     return JsonResponse(data)
 
 @login_required
 def profile(request):
     return render(request, 'store/profile.html')
+
+def product_list(request):
+    products = Product.objects.all()  # Assuming you have a Product model
+    return render(request, 'store/products.html', {'products': products})

@@ -1,28 +1,16 @@
-version: '3.8'
 services:
   web:
-    build: .
-    env_file:
-      - .env
-    container_name: Treevaq
-    volumes:
-      - .:/usr/src/app
-      - ./media:/usr/src/app/media
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "8000:8000"
     environment:
-      - PYTHONUNBUFFERED=1
-      - DJANGO_SETTINGS_MODULE=myproject.settings
-    depends_on:
-      - db
-    tty: true
-  db:
-    image: postgres:17
+      - SECRET_KEY=your-secret-key
+      - DEBUG=True
+      - ALLOWED_HOSTS=localhost,127.0.0.1
+      - GOOGLE_CLIENT_ID=your-google-client-id
+      - GOOGLE_CLIENT_SECRET=your-google-client-secret
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: mydatabase
-volumes:
-  postgres_data:
+      - .:/usr/src/app
+    command: ./entrypoint.sh

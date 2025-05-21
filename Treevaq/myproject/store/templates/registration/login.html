@@ -2,29 +2,255 @@
 {% load static %}
 
 {% block content %}
-<div class="auth-container">
-    <div class="auth-card">
-        <h2>ล็อกอิน 🌱</h2>
-        {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-        {% endfor %}
-        {% endif %}
-        <form method="post">
-            {% csrf_token %}
-            <div class="mb-3">
-                <label for="id_username" class="form-label">ชื่อผู้ใช้ 👤</label>
-                <input type="text" class="form-control" id="id_username" name="username" required>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="auth-card card shadow-lg border-0">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <img src="{% static 'images/leaf-icon.png' %}" alt="Treevaq Logo" class="auth-icon mb-3" width="80">
+                        <h2 class="h4 text-success">เข้าสู่ระบบ</h2>
+                        <p class="text-muted">กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ</p>
+                    </div>
+                    
+                    {% if messages %}
+                    <div class="alert alert-danger">
+                        {% for message in messages %}
+                        {{ message }}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="username" class="form-label">ชื่อผู้ใช้</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="password" class="form-label">รหัสผ่าน</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100 py-2 mb-3">เข้าสู่ระบบ</button>
+                        
+                        <div class="text-center">
+                            <a href="{% url 'register' %}" class="text-success">สมัครสมาชิก</a>
+                            <span class="mx-2">|</span>
+                            <a href="#" class="text-muted">ลืมรหัสผ่าน?</a>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="mb-3">
-                <label for="id_password" class="form-label">รหัสผ่าน 🔒</label>
-                <input type="password" class="form-control" id="id_password" name="password" required>
-            </div>
-            <a href="{% url 'social:begin' 'google-oauth2' %}">Login with Google</a>
-        </form>
-        <p class="mt-3 text-center">
-            ยังไม่มีบัญชี? <a href="{% url 'register' %}" class="auth-link">สมัครสมาชิก 🌿</a>
-        </p>
+        </div>
     </div>
 </div>
 {% endblock %}
+
+<style>
+    /* Main container */
+    .auth-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 80vh;
+        background-color: #f8f9fa;
+        padding: 20px;
+    }
+    
+    /* Card styling */
+    .auth-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 100, 0, 0.1);
+        padding: 40px;
+        width: 100%;
+        max-width: 450px;
+        transition: transform 0.3s ease;
+    }
+    
+    .auth-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    /* Header section */
+    .auth-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .auth-icon {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 15px;
+    }
+    
+    .auth-header h2 {
+        color: #2e7d32;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+    
+    .auth-subtitle {
+        color: #666;
+        font-size: 0.9rem;
+    }
+    
+    /* Form elements */
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        color: #555;
+        font-weight: 500;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    
+    .form-control:focus {
+        border-color: #4caf50;
+        box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        outline: none;
+    }
+    
+    /* Login button */
+    .btn-login {
+        width: 100%;
+        padding: 12px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+    
+    .btn-login:hover {
+        background-color: #3d8b40;
+    }
+    
+    /* Social login */
+    .social-login {
+        margin: 25px 0;
+        text-align: center;
+    }
+    
+    .divider {
+        position: relative;
+        color: #888;
+        margin: 20px 0;
+    }
+    
+    .divider::before, .divider::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        width: 40%;
+        height: 1px;
+        background-color: #ddd;
+    }
+    
+    .divider::before {
+        left: 0;
+    }
+    
+    .divider::after {
+        right: 0;
+    }
+    
+    .btn-google {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 10px 20px;
+        background-color: white;
+        color: #555;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+    
+    .btn-google:hover {
+        background-color: #f5f5f5;
+        border-color: #ccc;
+    }
+    
+    .btn-google img {
+        width: 18px;
+        height: 18px;
+    }
+    
+    /* Footer links */
+    .auth-footer {
+        text-align: center;
+        margin-top: 20px;
+        color: #666;
+    }
+    
+    .auth-link {
+        color: #4caf50;
+        font-weight: 500;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+    
+    .auth-link:hover {
+        color: #3d8b40;
+        text-decoration: underline;
+    }
+    
+    .forgot-password {
+        display: block;
+        text-align: right;
+        font-size: 0.85rem;
+        color: #666;
+        margin-top: 5px;
+        text-decoration: none;
+    }
+    
+    .forgot-password:hover {
+        color: #4caf50;
+    }
+    
+    /* Messages */
+    .auth-messages {
+        margin-bottom: 20px;
+    }
+    
+    .alert {
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+    
+    .alert-success {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+        border: 1px solid #c8e6c9;
+    }
+    
+    .alert-error {
+        background-color: #ffebee;
+        color: #c62828;
+        border: 1px solid #ffcdd2;
+    }
+</style>
