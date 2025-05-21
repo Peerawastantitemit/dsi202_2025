@@ -2,35 +2,36 @@
 {% load static %}
 
 {% block content %}
-<div class="container py-4">
-    <h2 class="text-center mb-4">ยืนยันการสั่งซื้อ ✅</h2>
-    <div class="row">
-        {% if cart_items %}
-        {% for item in cart_items %}
-        <div class="col-md-4 mb-3">
-            <div class="card">
-                {% if item.product.image %}
-                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="card-img-top img-fluid" style="object-fit: cover; height: 200px;">
-                {% else %}
-                <img src="{% static 'img/default.jpg' %}" alt="No Image" class="card-img-top img-fluid" style="object-fit: cover; height: 200px;">
-                {% endif %}
-                <div class="card-body text-center">
-                    <h5 class="card-title">{{ item.product.name }} (x{{ item.quantity }})</h5>
-                    <p class="card-text">ราคา: {{ item.total_price }} บาท 💸</p>
-                    <p class="card-text">ลด CO2: {{ item.product.co2_reduction }} กก. 🌍</p>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-        <div class="text-center mt-4">
-            <h3>ยอดรวมทั้งหมด: {{ total }} บาท 💰</h3>
-            <p class="text-success">ขอบคุณที่สั่งซื้อกับเรา! 🌱 การสั่งซื้อของคุณได้รับการยืนยันแล้ว</p>
-            <button onclick="openCartSidebar()" class="btn btn-primary mt-2">กลับไปช็อปต่อ 🛒</button>
-        </div>
-        {% else %}
-        <p class="text-center">ไม่มีสินค้าในตะกร้า 😢</p>
-        <a href="{% url 'index' %}" class="btn btn-primary mt-2">ไปช็อปสินค้า 🛒</a>
-        {% endif %}
+<div class="container py-4 text-center">
+    <h2>ยืนยันการสั่งซื้อเรียบร้อย ✅</h2>
+    <p>ขอบคุณที่เลือกซื้อสินค้ากับ Treevaq 🌱</p>
+    <h3>ยอดรวม: {{ total }} บาท 💰</h3>
+
+    {% if qr_image_data %}
+    <div class="mt-4">
+        <h4>ชำระเงินผ่าน PromptPay</h4>
+        <img src="data:image/png;base64,{{ qr_image_data | b64encode }}" alt="PromptPay QR Code" class="img-fluid" style="max-width: 300px;">
+        <p>กรุณาสแกน QR Code เพื่อชำระเงินจำนวน {{ total }} บาท</p>
+    </div>
+    {% else %}
+    <p class="text-danger">ไม่สามารถสร้าง QR Code ได้ กรุณาติดต่อผู้ดูแลระบบ</p>
+    {% endif %}
+
+    <div class="mt-4">
+        <h4>รายการสินค้า</h4>
+        <ul class="list-group mx-auto" style="max-width: 500px;">
+            {% for item in cart_items %}
+            <li class="list-group-item">
+                {{ item.product.name }} (x{{ item.quantity }}) - {{ item.total_price }} บาท
+            </li>
+            {% empty %}
+            <li class="list-group-item">ไม่มีสินค้าในคำสั่งซื้อ</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="mt-4">
+        <a href="{% url 'store:index' %}" class="btn btn-primary">กลับไปช็อปต่อ 🛒</a>
     </div>
 </div>
 {% endblock %}

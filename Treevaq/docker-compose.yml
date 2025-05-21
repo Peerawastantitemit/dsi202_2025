@@ -6,11 +6,13 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - SECRET_KEY=your-secret-key
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+      - SECRET_KEY=your-secure-secret-key
       - DEBUG=True
       - ALLOWED_HOSTS=localhost,127.0.0.1
-      - GOOGLE_CLIENT_ID=your-google-client-id
-      - GOOGLE_CLIENT_SECRET=your-google-client-secret
+      - GOOGLE_CLIENT_ID=your-actual-client-id
+      - GOOGLE_CLIENT_SECRET=your-actual-client-secret
     volumes:
       - .:/usr/src/app
     command: ./entrypoint.sh
