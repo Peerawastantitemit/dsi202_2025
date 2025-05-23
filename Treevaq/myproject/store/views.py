@@ -126,13 +126,15 @@ def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            messages.success(request, "สมัครสมาชิกสำเร็จ! คุณได้เข้าสู่ระบบแล้ว")
-            return redirect('store:index')
+            form.save()
+            messages.success(request, 'สมัครสมาชิกสำเร็จ! กรุณาล็อกอิน')
+            return redirect('login')
     else:
         form = UserCreationForm()
-    return render(request, 'store/registration/register.html', {'form': form})
+    return render(request, 'registration/register.html', {'form': form})
+
+def about(request):
+    return render(request, 'store/about.html')
 
 def about(request):
     return render(request, 'store/about.html')

@@ -1,8 +1,10 @@
+# ใช้ Python 3.10 slim เป็น base image
 FROM python:3.10-slim
 
+# กำหนด working directory ชั่วคราวสำหรับการคัดลอกไฟล์
 WORKDIR /app
 
-# ติดตั้งแพ็คเกจที่จำเป็นสำหรับ build และ dependencies ของ Python
+# อัปเดตแพ็คเกจและติดตั้ง build dependencies ที่จำเป็นสำหรับไลบรารี Python บางตัว
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpq-dev \
@@ -11,16 +13,22 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # คัดลอกไฟล์ requirements.txt และติดตั้ง dependencies
+# การทำเช่นนี้ก่อน COPY . . จะช่วยให้ Docker ใช้ cache ได้ดีขึ้นหาก requirements.txt ไม่เปลี่ยนแปลง
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# คัดลอกโค้ดแอปพลิเคชันทั้งหมด
+# คัดลอกโค้ดแอปพลิเคชันทั้งหมดจาก host ไปยัง /app ในคอนเทนเนอร์
+# สมมติว่าโครงสร้างโปรเจกต์ของคุณบน host มีโฟลเดอร์ 'myproject' ที่มี manage.py อยู่ข้างใน
 COPY . .
 
-# เปิดพอร์ต 8000
+# เปลี่ยน working directory ไปยัง root ของโปรเจกต์ Django (ที่ manage.py อยู่)
+# นี่คือส่วนสำคัญที่แก้ไขปัญหา 'No module named myproject.settings'
+# เพราะ manage.py จะถูกรันจากไดเรกทอรีนี้
+WORKDIR /app/myproject
+
+# เปิดพอร์ต 8000 เพื่อให้สามารถเข้าถึงแอปพลิเคชันได้จากภายนอกคอนเทนเนอร์
 EXPOSE 8000
 
-# กำหนดคำสั่งเริ่มต้นที่จะรันเมื่อคอนเทนเนอร์เริ่มต้น
-# นี่คือคำสั่งที่เคยอยู่ใน entrypoint.sh สำหรับการรัน Django server
-# หากคุณต้องการรัน migrate ก่อน ให้พิจารณาใส่ใน docker-compose.yml แทน
+# กำหนดคำสั่งเริ่มต้น ซึ่งจะถูก override ด้วย 'command' ใน docker-compose.yml
+# แต่เป็น good practice ที่จะมี CMD ที่ใช้งานได้ใน Dockerfile
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
