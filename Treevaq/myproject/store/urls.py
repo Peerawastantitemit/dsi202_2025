@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from django.contrib.auth import views as auth_views
+
 
 app_name = 'store'  # Add this namespace
 
@@ -13,8 +15,10 @@ urlpatterns = [
     path('cart/update/<int:pk>/<str:action>/', views.update_cart_quantity, name='update_cart_quantity'),
     path('cart/confirm/', views.confirm_cart, name='confirm_cart'),
     path('cart/items/', views.get_cart_items, name='get_cart_items'),
-    path('register/', views.register, name='register'),
     path('profile/', views.profile, name='profile'),
     path('about/', views.about, name='about'),
+    
+    # path('login/', auth_views.LoginView.as_view(), name='login'), # <--- อันนี้เป็น Django's LoginView
     path('promptpay_qr/', views.promptpay_qr, name='promptpay_qr'),
+    path('register/', views.register, name='register'), # ดูเหมือนคุณมี register ด้วย
 ]

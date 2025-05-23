@@ -1,12 +1,15 @@
-# myproject/myproject/settings.py
 import os
 from pathlib import Path
+import dj_database_url
 from dotenv import load_dotenv
 
+# Load environment variables from .env file
 load_dotenv()
 
+# Build paths inside the project
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Security settings
 SECRET_KEY = os.getenv('SECRET_KEY', 'your-secret-key')
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
@@ -23,16 +26,10 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-    # Remove unused apps for now
-    # 'channels',
-    # 'debug_toolbar',
-    # 'whitenoise.runserver_nostatic',
-    # 'social_django',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -55,21 +52,16 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # 'social_django.context_processors.backends',
             ],
         },
     },
 ]
 
-# Database (use PostgreSQL to match docker-compose.yml)
+# Use SQLite as the default database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB', 'treevaq'),
-        'USER': os.getenv('POSTGRES_USER', 'user'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'password'),
-        'HOST': os.getenv('POSTGRES_HOST', 'db'),
-        'PORT': os.getenv('POSTGRES_PORT', '5432'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',  # ไฟล์ฐานข้อมูลจะอยู่ในโฟลเดอร์โปรเจกต์
     }
 }
 
@@ -87,8 +79,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -98,7 +89,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
-    # 'social_django.backends.google.GoogleOAuth2',
 ]
 
 # Allauth settings
@@ -106,19 +96,23 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_USERNAME_REQUIRED = False
-LOGIN_REDIRECT_URL = '/store/'
-LOGOUT_REDIRECT_URL = '/store/'
+LOGIN_URL = 'store:login'  # บอก Django ว่า URL สำหรับ login คืออะไร (ใช้เมื่อ @login_required redirect)
+LOGIN_REDIRECT_URL = 'store:index' # หน้าที่จะ redirect ไปหลัง login สำเร็จ (ถ้า view ไม่ได้กำหนดเอง)
+LOGOUT_REDIRECT_URL = 'store:index'
 ACCOUNT_SIGNUP_REDIRECT_URL = '/store/profile/'
 
-# Social Auth (Google)
+# Social Auth (Google) for django-allauth
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
+        'APP': {
+            'client_id': os.getenv('GOOGLE_CLIENT_ID', ''),
+            'secret': os.getenv('GOOGLE_CLIENT_SECRET', ''),
+            'key': ''
+        },
         'SCOPE': ['profile', 'email'],
         'AUTH_PARAMS': {'access_type': 'online'},
     }
 }
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('GOOGLE_CLIENT_ID', '')
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('GOOGLE_CLIENT_SECRET', '')
 
 # Logging
 LOGGING = {
@@ -150,4 +144,4 @@ LOGGING = {
             'propagate': True,
         },
     },
-}
+}   

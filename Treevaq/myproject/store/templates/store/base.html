@@ -11,7 +11,10 @@
     <!-- Preload important resources -->
     <link rel="preload" href="{% static 'css/style.css' %}" as="style">
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" as="style">
-    
+
+    <link rel="stylesheet" href="{% static 'css/your_login_styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
     <!-- Favicon -->
     <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
     <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
@@ -123,14 +126,14 @@
                         <a class="nav-link text-white" href="{% url 'store:profile' %}">โปรไฟล์</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="{% url 'logout' %}">ออกจากระบบ</a>
+                        <a class="nav-link text-white" href="{% url 'store:logout' %}">ออกจากระบบ</a> {# เปลี่ยนเป็น store:logout #}
                     </li>
                     {% else %}
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="{% url 'login' %}">ล็อกอิน</a>
+                        <a class="nav-link text-white" href="{% url 'store:login' %}">ล็อกอิน</a> {# ถูกต้องแล้ว #}
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="{% url 'store:register' %}">สมัครสมาชิก</a>
+                        <a class="nav-link text-white" href="{% url 'store:register' %}">สมัครสมาชิก</a> {# ถูกต้องแล้ว #}
                     </li>
                     {% endif %}
                     <li class="nav-item ms-lg-3">

@@ -17,22 +17,17 @@ from .models import Product, Cart, CartItem
 # Set up logging
 logger = logging.getLogger(__name__)
 
+# dsi202/Treevaq/myproject/store/views.py
+from django.shortcuts import render
+
 def index(request):
-    query = request.GET.get('q', '').strip()
-    if query:
-        products = Product.objects.filter(name__icontains=query) | Product.objects.filter(description__icontains=query)
-    else:
-        products = Product.objects.all()
-    
-    cart_items = CartItem.objects.filter(cart__user=request.user).select_related('product') if request.user.is_authenticated else []
-    for item in cart_items:
-        item.total_price = Decimal(str(item.product.price)) * Decimal(str(item.quantity))
-    
-    return render(request, 'store/index.html', {
-        'products': products,
-        'cart_items': cart_items,
-        'query': query
-    })
+    # อาจจะมี logic เพิ่มเติม เช่น ดึงข้อมูลสินค้ามาแสดง
+    # products = Product.objects.all()
+    # context = {'products': products}
+    # return render(request, 'store/index.html', context)
+    return render(request, 'store/index.html')
+
+# หรือถ้ามี view อื่นๆ ที่คุณต้องการใช้เป็นหน้าแรก ก็ใช้ view นั้นแทน
 
 def product_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
@@ -88,7 +83,7 @@ def cart(request):
 @login_required
 def confirm_cart(request):
     if not request.user.is_authenticated:
-        return redirect('login')
+        return redirect('store:login')
 
     cart_items = CartItem.objects.filter(cart__user=request.user).select_related('product')
     if not cart_items:

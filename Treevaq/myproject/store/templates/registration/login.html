@@ -1,63 +1,95 @@
-{% extends 'store/base.html' %}
-{% load static i18n %}
+{% extends "store/base.html" %}
+{% load static i18n %} {# เพิ่ม i18n ถ้ายังไม่มี สำหรับ {% trans "..." %} #}
+
+{% block title %}{% trans "เข้าสู่ระบบ" %} - Treevaq{% endblock %}
+
+{# ลบการ link CSS ซ้ำซ้อนที่นี่ ถ้ามันถูก link ใน base.html แล้ว #}
+{# <link rel="stylesheet" href="{% static 'css/your_login_styles.css' %}"> #}
+{# <link rel="stylesheet" href="{% static 'css/style.css' %}"> #}
 
 {% block content %}
-<div class="container my-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-5">
-            <div class="auth-card card shadow-lg border-0">
-                <div class="card-body p-5">
-                    <div class="text-center mb-4">
-                        <img src="{% static 'images/leaf-icon.png' %}" alt="{% trans 'Treevaq Logo' %}" class="auth-icon mb-3" width="80">
-                        <h2 class="h4 text-success">{% trans "เข้าสู่ระบบ" %}</h2>
-                        <p class="text-muted">{% trans "กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ" %}</p>
-                    </div>
-                    
-                    {% if messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                        {% for message in messages %}
-                        {{ message }}
-                        {% endfor %}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{% trans 'Close' %}"></button>
-                    </div>
-                    {% endif %}
-                    
-                    <form method="post" class="needs-validation" novalidate id="login-form">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <label for="username" class="form-label">{% trans "ชื่อผู้ใช้" %}</label>
-                            <input type="text" class="form-control" id="username" name="username" required aria-describedby="usernameFeedback">
-                            <div id="usernameFeedback" class="invalid-feedback">
-                                {% trans "กรุณากรอกชื่อผู้ใช้" %}
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">{% trans "รหัสผ่าน" %}</label>
-                            <input type="password" class="form-control" id="password" name="password" required aria-describedby="passwordFeedback">
-                            <div id="passwordFeedback" class="invalid-feedback">
-                                {% trans "กรุณากรอกรหัสผ่าน" %}
-                            </div>
-                            <div class="text-center mt-2">
-                                <a href="{% url 'account_reset_password' %}" class="text-muted small">{% trans "ลืมรหัสผ่าน?" %}</a>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-success w-100 py-2 mb-3" id="login-btn">
-                            <span class="spinner-border spinner-border-sm me-2 d-none" role="status" aria-hidden="true" id="login-spinner"></span>
-                            <i class="fas fa-sign-in-alt me-2"></i>{% trans "เข้าสู่ระบบ" %}
-                        </button>
-                        
-                        <div class="social-login text-center">
-                            <p class="divider">{% trans "หรือเข้าสู่ระบบด้วย" %}</p>
-                            <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn-google">
-                                <img src="{% static 'images/google-icon.png' %}" alt="{% trans 'Google Icon' %}" class="me-2">
-                                {% trans "Google" %}
-                            </a>
+<div class="auth-container d-flex align-items-center py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5 col-xl-4">
+                <div class="auth-card card shadow-sm border-0 rounded-lg">
+                    <div class="card-body p-4 p-md-5">
+                        <div class="text-center mb-4">
+                            <img src="{% static 'images/leaf-icon.png' %}" alt="{% trans 'Treevaq Logo' %}" class="auth-icon mb-3" width="70">
+                            <h1 class="h4 fw-bold text-success mb-1">{% trans "ยินดีต้อนรับกลับมา" %}</h1>
+                            <p class="text-muted small">{% trans "เข้าสู่ระบบเพื่อใช้งาน Treevaq ต่อ" %}</p>
                         </div>
                         
-                        <div class="text-center mt-4">
-                            {% trans "ยังไม่มีบัญชี?" %} <a href="{% url 'account_register' %}" class="auth-link">{% trans "สมัครสมาชิก" %}</a>
-                        </div>
-                    </form>
+                        {% if messages %}
+                            {% for message in messages %}
+                            <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags %}{{ message.tags }}{% else %}info{% endif %} alert-dismissible fade show small mb-3" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{% trans 'Close' %}"></button>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                        
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger small mb-3" role="alert">
+                                {% for error in form.non_field_errors %}
+                                    <p class="mb-0">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <form method="post" action="{% url 'store:login' %}" class="needs-validation" novalidate id="login-form">
+                            {% csrf_token %}
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.username.id_for_label }}" class="form-label small fw-medium">{% trans "ชื่อผู้ใช้" %}</label>
+                                {{ form.username }} {# Django จะ render input พร้อม class ที่เหมาะสมถ้าใช้ widget #}
+                                <div class="invalid-feedback small">
+                                    {% if form.username.errors %}
+                                        {% for error in form.username.errors %}{{ error }}{% endfor %}
+                                    {% else %}
+                                        {% trans "กรุณากรอกชื่อผู้ใช้" %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.password.id_for_label }}" class="form-label small fw-medium">{% trans "รหัสผ่าน" %}</label>
+                                {{ form.password }} {# Django จะ render input พร้อม class ที่เหมาะสมถ้าใช้ widget #}
+                                <div class="invalid-feedback small">
+                                     {% if form.password.errors %}
+                                        {% for error in form.password.errors %}{{ error }}{% endfor %}
+                                    {% else %}
+                                        {% trans "กรุณากรอกรหัสผ่าน" %}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-end mb-3">
+                                <a href="{% url 'account_reset_password' %}" class="text-muted small text-decoration-none">{% trans "ลืมรหัสผ่าน?" %}</a>
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-success btn-lg" id="login-btn">
+                                    <span class="spinner-border spinner-border-sm me-2 d-none" role="status" aria-hidden="true" id="login-spinner"></span>
+                                    <i class="fas fa-sign-in-alt me-1"></i> {% trans "เข้าสู่ระบบ" %}
+                                </button>
+                            </div>
+                            
+                            {% if SOCIAL_AUTH_GOOGLE_OAUTH2_KEY %} {# ตรวจสอบว่ามีการตั้งค่า Social Auth หรือไม่ #}
+                            <div class="social-login text-center my-4">
+                                <p class="divider small text-muted"><span>{% trans "หรือเข้าสู่ระบบด้วย" %}</span></p>
+                                <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-outline-secondary w-100 btn-google">
+                                    <img src="{% static 'images/google-icon.png' %}" alt="{% trans 'Google Icon' %}" class="me-2">
+                                    {% trans "เข้าสู่ระบบด้วย Google" %}
+                                </a>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="text-center mt-4 small">
+                                <p class="mb-0">{% trans "ยังไม่มีบัญชี?" %} <a href="{% url 'store:register' %}" class="auth-link fw-medium">{% trans "สมัครสมาชิกเลย" %}</a></p>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -67,132 +99,137 @@
 
 {% block extra_js %}
 <script>
-    // Bootstrap 5 client-side validation
-    (function () {
-        'use strict';
-        const form = document.getElementById('login-form');
-        form.addEventListener('submit', function (event) {
-            if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-            form.classList.add('was-validated');
+(function () {
+    'use strict';
+    const forms = document.querySelectorAll('.needs-validation');
 
-            // Show loading spinner on submit
-            const btn = document.getElementById('login-btn');
-            const spinner = document.getElementById('login-spinner');
-            if (form.checkValidity()) {
-                btn.disabled = true;
-                spinner.classList.remove('d-none');
-            }
-        }, false);
-    })();
+    Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                } else {
+                    // Show loading spinner on submit if form is valid
+                    const btn = form.querySelector('#login-btn'); // More specific selector
+                    const spinner = form.querySelector('#login-spinner'); // More specific selector
+                    if (btn && spinner) {
+                        btn.disabled = true;
+                        spinner.classList.remove('d-none');
+                    }
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+})();
 </script>
 {% endblock %}
 
 {% block extra_css %}
 <style>
-    /* Auth Container */
+    body {
+        background-color: #f4f7f6; /* สีพื้นหลังอ่อนๆ */
+    }
+
     .auth-container {
-        min-height: calc(100vh - 150px);
-        display: flex;
-        align-items: center;
-        background-color: #f8f9fa;
+        min-height: calc(100vh - 120px); /* ปรับให้พอดีกับ Navbar และ Footer (ถ้ามี) */
     }
     
-    /* Auth Card */
     .auth-card {
+        background-color: #ffffff;
+        border-radius: 0.75rem; /* 12px */
         border: none;
-        border-radius: 12px;
-        overflow: hidden;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        /* box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.07); */ /* ลดเงาลงเล็กน้อย */
     }
     
-    .auth-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(46, 125, 50, 0.2);
+    .auth-icon {
+        width: 60px; /* ลดขนาดไอคอนเล็กน้อย */
+        height: auto;
+        opacity: 0.8;
+    }
+
+    .form-label.small {
+        font-size: 0.875em; /* 14px */
+        color: #495057; /* สีเทาเข้มขึ้นเล็กน้อย */
     }
     
-    /* Form Elements */
     .form-control {
-        padding: 12px 15px;
-        border: 1px solid #ced4da;
-        border-radius: 8px;
-        transition: all 0.3s;
+        padding: 0.75rem 1rem; /* 12px 16px */
+        border: 1px solid #e0e0e0; /* สีขอบอ่อนลง */
+        border-radius: 0.5rem; /* 8px */
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        font-size: 0.9375rem; /* 15px */
     }
     
     .form-control:focus {
-        border-color: #4caf50;
-        box-shadow: 0 0 0 0.25rem rgba(76, 175, 80, 0.25);
+        border-color: #2e7d32; /* สีเขียว Treevaq */
+        box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.15);
     }
     
-    .form-control:invalid:focus {
+    .form-control.is-invalid:focus {
         border-color: #dc3545;
-        box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.15);
+    }
+
+    .invalid-feedback.small {
+        font-size: 0.8em; /* 12.8px */
     }
     
-    /* Buttons */
     .btn-success {
-        background-color: #2e7d32;
+        background-color: #2e7d32; /* สีเขียวหลัก */
         border-color: #2e7d32;
-        transition: all 0.3s;
+        padding: 0.75rem 1rem;
+        font-weight: 500;
+        transition: background-color 0.2s ease, border-color 0.2s ease;
     }
     
     .btn-success:hover {
-        background-color: #1b5e20;
+        background-color: #1b5e20; /* เข้มขึ้นเมื่อ hover */
         border-color: #1b5e20;
     }
-    
-    .btn-success:disabled {
-        opacity: 0.7;
-        cursor: not-allowed;
+
+    .btn-success:disabled .spinner-border {
+        width: 1em;
+        height: 1em;
+        border-width: .2em;
     }
     
-    /* Links */
-    .auth-link, .text-success, .text-muted {
+    .auth-link {
         color: #2e7d32;
-        font-weight: 500;
         text-decoration: none;
-        transition: color 0.3s;
     }
-    
-    .auth-link:hover, .text-success:hover {
+    .auth-link:hover {
         color: #1b5e20;
         text-decoration: underline;
     }
-    
-    .text-muted:hover {
-        color: #2e7d32;
-    }
-    
-    /* Social Login */
-    .social-login {
-        margin: 1.5rem 0;
+
+    .text-muted.small a:hover {
+         color: #2e7d32 !important;
     }
     
     .divider {
-        position: relative;
+        display: flex;
+        align-items: center;
         text-align: center;
-        margin: 1.5rem 0;
-        color: #6c757d;
+        color: #adb5bd;
     }
     
     .divider::before,
     .divider::after {
-        content: "";
-        position: absolute;
-        top: 50%;
-        width: 40%;
-        height: 1px;
-        background-color: #dee2e6;
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid #dee2e6;
     }
     
-    .divider::before {
-        left: 0;
+    .divider:not(:empty)::before {
+        margin-right: .5em;
     }
     
-    .divider::after {
-        right: 0;
+    .divider:not(:empty)::after {
+        margin-left: .5em;
+    }
+    .divider > span {
+        padding: 0 0.5em;
     }
     
     .btn-google {
@@ -200,35 +237,49 @@
         align-items: center;
         justify-content: center;
         gap: 8px;
-        padding: 10px 16px;
-        background-color: white;
+        padding: 0.65rem 1rem; /* ปรับ padding ให้พอดี */
+        background-color: #fff;
         color: #3c4043;
         border: 1px solid #dadce0;
-        border-radius: 8px;
+        border-radius: 0.5rem; /* 8px */
         font-weight: 500;
-        transition: all 0.3s;
+        transition: background-color 0.2s ease, box-shadow 0.2s ease;
+        font-size: 0.9375rem; /* 15px */
     }
     
     .btn-google:hover {
         background-color: #f8f9fa;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        border-color: #c6c9cc;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     }
     
     .btn-google img {
         width: 18px;
         height: 18px;
     }
-    
-    /* Responsive Adjustments */
-    @media (max-width: 575.98px) {
-        .auth-card {
-            border-radius: 0;
-            box-shadow: none;
-        }
-        
-        .container {
-            padding: 0;
-        }
+
+    /* ให้ messages อยู่ชิดขอบซ้าย-ขวาของ card body มากขึ้น */
+    .card-body > .alert {
+        margin-left: -1rem; /* ปรับตาม padding ของ card-body ถ้า p-4 คือ 1.5rem ให้ใช้ -1.5rem */
+        margin-right: -1rem; /* ปรับตาม padding ของ card-body ถ้า p-5 คือ 3rem ให้ใช้ -3rem */
+        /* หากใช้ p-4 หรือ p-md-5 อาจจะต้องปรับค่าลบให้ตรงกับ padding ที่แท้จริง */
+        /* หรือกำหนด padding ซ้ายขวาของ alert ให้เป็น 0 แล้วให้ container ภายในจัดการ */
     }
+    .card-body.p-4 > .alert {
+        margin-left: -1.5rem;
+        margin-right: -1.5rem;
+        border-radius: 0; /* ทำให้ alert เต็มความกว้างภายใน card-body */
+        border-left: 0;
+        border-right: 0;
+    }
+     .card-body.p-md-5 > .alert {
+        margin-left: -3rem;
+        margin-right: -3rem;
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+    }
+
+
 </style>
 {% endblock %}

@@ -22,12 +22,43 @@ class Cart(models.Model):
 
     def __str__(self):
         return f"Cart of {self.user.username if self.user else 'Anonymous'}"
+    
+        # === Environmental fields ===
+    sustainability_score = models.PositiveIntegerField(
+        null=True, blank=True,
+        help_text="คะแนนด้านความยั่งยืน 1-10"
+    )
+    materials_used = models.TextField(
+        blank=True,
+        help_text="เช่น ฝ้ายออร์แกนิก, พลาสติกรีไซเคิล"
+    )
+    certifications = models.CharField(
+        max_length=255, blank=True,
+        help_text="เช่น Fair Trade, GOTS, FSC Certified"
+    )
+    carbon_footprint_kg_co2e = models.DecimalField(
+        max_digits=6, decimal_places=2, null=True, blank=True,
+        help_text="ปริมาณการปล่อย CO2 เทียบเท่า (kg)"
+    )
+    water_usage_liters = models.DecimalField(
+        max_digits=8, decimal_places=2, null=True, blank=True,
+        help_text="ปริมาณการใช้น้ำ (ลิตร) โดยประมาณ"
+    )
+    recyclability_info = models.TextField(
+        blank=True,
+        help_text="ข้อมูลการรีไซเคิลสินค้าหรือบรรจุภัณฑ์"
+    )
+    supplier_eco_policy_link = models.URLField(
+        blank=True,
+        help_text="ลิงก์ไปยังนโยบายสิ่งแวดล้อมของซัพพลายเออร์"
+    )
+    country_of_origin = models.CharField(max_length=100, blank=True)
 
 class CartItem(models.Model):
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    # ตัวอย่างฟิลด์
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
-    added_at = models.DateTimeField(auto_now_add=True)
+    # เพิ่มฟิลด์อื่น ๆ ตามที่ต้องการ
 
     def __str__(self):
         return f"{self.quantity} x {self.product.name}"
