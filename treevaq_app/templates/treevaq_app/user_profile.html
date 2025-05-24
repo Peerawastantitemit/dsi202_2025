@@ -1,0 +1,45 @@
+{% extends 'treevaq_app/base.html' %}
+{% load static %}
+
+{% block title %}{{ user.username }} Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">ข้อมูลโปรไฟล์ของคุณ</h2>
+    <hr>
+
+    <div class="card p-4">
+        <div class="row">
+            <div class="col-md-4 text-center">
+                {# You can add an avatar/profile picture here later #}
+                <img src="{% static 'treevaq_app/images/default_avatar.png' %}" alt="Profile Picture" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                <h4>{{ user.username }}</h4>
+                <p class="text-muted">{{ user.email }}</p>
+                <p class="text-muted">เป็นสมาชิกตั้งแต่: {{ user.date_joined|date:"d M Y" }}</p>
+            </div>
+            <div class="col-md-8">
+                <h5 class="mb-3">ข้อมูลส่วนตัว</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>ชื่อผู้ใช้:</strong> {{ user.username }}</li>
+                    <li class="list-group-item"><strong>อีเมล:</strong> {{ user.email }}</li>
+                    {% if user.first_name %}
+                    <li class="list-group-item"><strong>ชื่อจริง:</strong> {{ user.first_name }}</li>
+                    {% endif %}
+                    {% if user.last_name %}
+                    <li class="list-group-item"><strong>นามสกุล:</strong> {{ user.last_name }}</li>
+                    {% endif %}
+                    <li class="list-group-item"><strong>สถานะพนักงาน:</strong> {% if user.is_staff %}ใช่{% else %}ไม่ใช่{% endif %}</li>
+                    <li class="list-group-item"><strong>สถานะผู้ดูแลระบบ:</strong> {% if user.is_superuser %}ใช่{% else %}ไม่ใช่{% endif %}</li>
+                </ul>
+
+                <h5 class="mt-4 mb-3">การตั้งค่า</h5>
+                <a href="#" class="btn btn-secondary mt-2">แก้ไขโปรไฟล์</a>
+                <a href="{% url 'account_change_password' %}" class="btn btn-secondary mt-2">เปลี่ยนรหัสผ่าน</a>
+                {# Link to past orders page if you create one #}
+                {# <h5 class="mt-4 mb-3">คำสั่งซื้อของฉัน</h5> #}
+                {# <a href="{% url 'my_orders' %}" class="btn btn-info">ดูคำสั่งซื้อที่ผ่านมา</a> #}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

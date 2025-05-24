@@ -1,0 +1,33 @@
+{% extends 'treevaq_app/base.html' %}
+
+{% block title %}PromptPay Payment{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>ชำระเงินด้วย PromptPay</h2>
+    <hr>
+
+    {% if total_amount %}
+        <p><strong>ยอดชำระ:</strong> {{ total_amount|floatformat:2 }} THB</p>
+
+        <p>สแกน QR Code ด้านล่างเพื่อชำระเงินผ่านแอปธนาคารของคุณ:</p>
+
+        <div class="text-center my-4">
+            <img src="{% url 'generate_qr_code_image' %}?mobile={{ merchant_promptpay_id }}&amount={{ total_amount }}" alt="PromptPay QR Code" class="img-fluid" style="max-width: 300px;">
+        </div>
+
+        <p class="text-muted">โปรดตรวจสอบยอดเงินและรายละเอียดผู้รับให้ถูกต้องก่อนทำการชำระเงิน.</p>
+
+        <div class="mt-4">
+            <a href="{% url 'cart_detail' %}" class="btn btn-secondary">กลับไปที่ตะกร้า</a>
+            {# You might want to add a button to mark the order as paid or check payment status here #}
+            {# For a real system, you'd integrate with a payment gateway webhook for confirmation #}
+            <button class="btn btn-success" disabled>ยืนยันการชำระเงิน (ต้องตรวจสอบด้วยระบบ)</button>
+        </div>
+
+    {% else %}
+        <p>ไม่พบยอดที่ต้องชำระ หรือตะกร้าสินค้าว่างเปล่า.</p>
+        <a href="{% url 'product_list' %}" class="btn btn-primary">เลือกซื้อสินค้าต่อ</a>
+    {% endif %}
+</div>
+{% endblock %}

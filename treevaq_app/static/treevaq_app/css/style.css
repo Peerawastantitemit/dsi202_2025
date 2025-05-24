@@ -1,0 +1,298 @@
+/* CSS สำหรับธีม Treevaq: เขียวๆ สวยๆ มินิมอล */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #F8F8F8; /* สีพื้นหลังอ่อนๆ */
+    color: #333;
+    line-height: 1.6;
+}
+.navbar {
+    background-color: #2E8B57; /* สีเขียวเข้มสำหรับ Navbar */
+    color: white;
+    padding: 1em 0;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.navbar h1 {
+    margin: 0;
+    font-size: 2.2em;
+    letter-spacing: 2px;
+}
+.navbar p {
+    margin: 0.5em 0 0;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+.container {
+    max-width: 960px;
+    margin: 2em auto;
+    padding: 0 1em;
+    text-align: center;
+}
+.hero-section {
+    background-color: #D4EDDA; /* สีเขียวอ่อนสำหรับ Hero Section */
+    padding: 4em 2em;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    margin-bottom: 2em;
+}
+.hero-section h2 {
+    color: #2E8B57; /* สีเขียวเข้ม */
+    font-size: 2.8em;
+    margin-bottom: 0.5em;
+}
+.hero-section p {
+    font-size: 1.3em;
+    color: #4CAF50; /* สีเขียวกลางๆ */
+    margin-bottom: 1.5em;
+}
+.btn {
+    display: inline-block;
+    background-color: #4CAF50; /* สีเขียวสดใสสำหรับปุ่ม */
+    color: white;
+    padding: 1em 2em;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+.btn:hover {
+    background-color: #388E3C; /* สีเขียวเข้มขึ้นเมื่อ Hover */
+}
+.footer {
+    text-align: center;
+    padding: 2em 0;
+    color: #666;
+    font-size: 0.8em;
+    border-top: 1px solid #EEE;
+    margin-top: 3em;
+}
+
+/* CSS สำหรับ Navbar Links */
+.nav-link {
+    color: white;
+    text-decoration: none;
+    padding: 0.5em 1em;
+    margin-left: 1em;
+    transition: background-color 0.3s ease;
+}
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+/* CSS สำหรับ Products Page */
+.products-grid {
+    text-align: center;
+}
+.product-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 1.5em;
+    text-align: left;
+    transition: transform 0.2s ease-in-out;
+}
+.product-card:hover {
+    transform: translateY(-5px);
+}
+.product-card h3 {
+    color: #2E8B57;
+    margin-top: 1em;
+    font-size: 1.5em;
+}
+.product-card .price {
+    font-weight: bold;
+    color: #4CAF50;
+    font-size: 1.2em;
+    margin-bottom: 0.5em;
+}
+.product-card .description {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 1em;
+}
+.btn-small {
+    padding: 0.7em 1.5em;
+    font-size: 0.9em;
+    display: block; /* ทำให้ปุ่มเต็มความกว้างของ card */
+    text-align: center;
+}
+.product-card form {
+    display: flex;
+    align-items: center;
+    margin-top: 1em;
+    justify-content: center; /* จัดให้อยู่ตรงกลางถ้าต้องการ */
+}
+.product-card form input[type="number"] {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* CSS สำหรับ Cart Page */
+.cart-section {
+    background-color: white;
+    padding: 2em;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5em;
+}
+.cart-table th, .cart-table td {
+    border: 1px solid #eee;
+    padding: 1em;
+    text-align: left;
+    vertical-align: middle;
+}
+.cart-table th {
+    background-color: #f2f2f2;
+    color: #333;
+}
+.cart-summary {
+    text-align: right;
+    margin-top: 2em;
+    padding-top: 1em;
+    border-top: 1px solid #eee;
+}
+.cart-summary h3 {
+    color: #2E8B57;
+    font-size: 1.8em;
+    margin-bottom: 1em;
+}
+.btn-update, .btn-remove {
+    background-color: #6c757d; /* Gray */
+    color: white;
+    border: none;
+    padding: 0.5em 1em;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.btn-update:hover {
+    background-color: #5a6268;
+}
+.btn-remove {
+    background-color: #dc3545; /* Red */
+}
+.btn-remove:hover {
+    background-color: #c82333;
+}
+.btn-checkout {
+    background-color: #28a745; /* Green */
+    margin-left: 1em;
+}
+.btn-checkout:hover {
+    background-color: #218838;
+}
+.btn-continue {
+    background-color: #007bff; /* Blue */
+}
+.btn-continue:hover {
+    background-color: #0056b3;
+}
+.quantity-form {
+    display: inline-flex;
+    align-items: center;
+}
+.quantity-form input {
+    margin-right: 5px;
+}
+
+/* CSS สำหรับ Auth Forms (Login/Register) */
+.auth-form-section {
+    background-color: white;
+    padding: 2em;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    max-width: 400px;
+    margin: 2em auto;
+    text-align: center;
+}
+.auth-form-section h2 {
+    color: #2E8B57;
+    margin-bottom: 1.5em;
+}
+.form-group {
+    margin-bottom: 1em;
+    text-align: left;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 0.5em;
+    font-weight: bold;
+    color: #333;
+}
+.form-group input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+.error-message {
+    color: #dc3545;
+    margin-bottom: 1em;
+}
+.auth-form-section .btn {
+    width: 100%;
+    margin-top: 1.5em;
+    padding: 12px;
+    font-size: 1.1em;
+}
+.auth-form-section p {
+    margin-top: 1.5em;
+    font-size: 0.9em;
+}
+.auth-form-section a {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: bold;
+}
+.auth-form-section a:hover {
+    text-decoration: underline;
+}
+
+/* CSS สำหรับปุ่ม Google Login */
+.social-login-divider {
+    margin: 1.5em 0;
+    position: relative;
+    text-align: center;
+    font-size: 0.9em;
+    color: #666;
+}
+.social-login-divider::before,
+.social-login-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background: #eee;
+}
+.social-login-divider::before {
+    left: 0;
+}
+.social-login-divider::after {
+    right: 0;
+}
+.btn-google {
+    background-color: #DB4437; /* Google Red */
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 1em;
+    transition: background-color 0.3s ease;
+}
+.btn-google:hover {
+    background-color: #c23321;
+}

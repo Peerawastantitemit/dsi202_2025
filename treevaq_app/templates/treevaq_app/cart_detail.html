@@ -1,0 +1,72 @@
+{% extends 'treevaq_app/base.html' %}
+{% load static %}
+
+{% block title %}Your Shopping Cart{% endblock %}
+
+{% block content %}
+<section class="cart-detail container my-5">
+    <h2>ตะกร้าสินค้าของคุณ</h2>
+    {% if cart_items %}
+    <div class="row">
+        <div class="col-md-9">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>สินค้า</th>
+                            <th>รูปภาพ</th> {# NEW: Image Column Header #}
+                            <th>ราคาต่อหน่วย</th>
+                            <th>จำนวน</th>
+                            <th>ราคารวม</th>
+                            <th>ดำเนินการ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in cart_items %}
+                        <tr>
+                            <td>{{ item.product.name }}</td>
+                            <td> {# NEW: Image Display Cell #}
+                                {% if item.product.image %}
+                                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width: 50px; height: 50px; object-fit: cover;">
+                                {% else %}
+                                    <img src="{% static 'treevaq_app/images/placeholder.png' %}" alt="No image" style="width: 50px; height: 50px; object-fit: cover;">
+                                {% endif %}
+                            </td>
+                            <td>฿{{ item.product.price|floatformat:2 }}</td>
+                            <td>
+                                <form action="{% url 'update_cart_quantity' item.id %}" method="post" class="form-inline">
+                                    {% csrf_token %}
+                                    <input type="number" name="quantity" value="{{ item.quantity }}" min="0" class="form-control form-control-sm" style="width: 70px; display: inline-block;">
+                                    <button type="submit" class="btn btn-sm btn-outline-secondary ml-2">อัปเดต</button>
+                                </form>
+                            </td>
+                            <td>฿{{ item.get_total_item_price|floatformat:2 }}</td>
+                            <td>
+                                <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger btn-sm">ลบ</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header">
+                    สรุปคำสั่งซื้อ
+                </div>
+                <div class="card-body">
+                    <p>รวมทั้งหมด: <strong>฿{{ total_price|floatformat:2 }}</strong></p>
+                    <a href="{% url 'checkout_payment' %}" class="btn btn-primary btn-block">ดำเนินการชำระเงิน</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+        <p class="text-center">ตะกร้าสินค้าของคุณว่างเปล่า</p>
+        <div class="text-center">
+            <a href="{% url 'products' %}" class="btn btn-info">เลือกซื้อสินค้า</a>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}
