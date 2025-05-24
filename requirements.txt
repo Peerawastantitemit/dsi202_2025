@@ -8,3 +8,4 @@ requests
 jwt
 libscrc 
 qrcode
+psycopg2-binary

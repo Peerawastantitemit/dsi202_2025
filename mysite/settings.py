@@ -1,6 +1,9 @@
-from logging import config
 import os
 from pathlib import Path
+from dotenv import load_dotenv # CORRECTED: Import load_dotenv from python-dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -10,12 +13,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+# CORRECTED: Use os.environ.get() to read from environment variables
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-f(0#gricomt=m=#b(ins_k$$z+c)$hpvw=e=zxnc30ma3+mtj^')
+# The second argument is a fallback development key.
+# In production, ensure DJANGO_SECRET_KEY is set in your environment.
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True' # Read DEBUG from .env
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '*').split(',') # Read ALLOWED_HOSTS from .env
 
 # Application definition
 
@@ -29,13 +35,12 @@ INSTALLED_APPS = [
     'treevaq_app',
 
     # Allauth apps
-    'allauth', # <--- เพิ่มบรรทัดนี้
-    'allauth.account', # <--- เพิ่มบรรทัดนี้
-    'allauth.socialaccount', # <--- เพิ่มบรรทัดนี้
-    'allauth.socialaccount.providers.google', # <--- เพิ่มบรรทัดนี้สำหรับ Google
-    # ถ้าอยากได้ provider อื่นๆ เช่น 'allauth.socialaccount.providers.facebook',
-    'crispy_forms', # <--- เพิ่มบรรทัดนี้
-    'crispy_bootstrap5', # <--- เพิ่มบรรทัดนี้ (เราจะใช้ Bootstrap 5 เป็นตัวอย่าง)
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -54,15 +59,15 @@ ROOT_URLCONF = 'mysite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')], # อาจจะมี 'templates' ใน root project
-        'APP_DIRS': True, # ให้ Django ค้นหา templates ในโฟลเดอร์ 'templates' ของแต่ละ app
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.media', 
+                'django.template.context_processors.media',
             ],
         },
     },
@@ -77,10 +82,10 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('POSTGRES_DB'),
-        'USER': config('POSTGRES_USER'),
-        'PASSWORD': config('POSTGRES_PASSWORD'),
-        'HOST': 'db',
+        'NAME': os.environ.get('POSTGRES_DB'), # CORRECTED: Use os.environ.get()
+        'USER': os.environ.get('POSTGRES_USER'), # CORRECTED: Use os.environ.get()
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'), # CORRECTED: Use os.environ.get()
+        'HOST': 'db', # 'db' is the service name in docker-compose for the PostgreSQL container
         'PORT': '5432',
     }
 }
@@ -121,7 +126,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # หรือชื่ออื่นที่ต้องการ
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'treevaq_app/static'),
 ]
@@ -134,20 +139,17 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = '/' # เมื่อ Login สำเร็จจะเปลี่ยนเส้นทางไปหน้าแรก
-LOGOUT_REDIRECT_URL = '/' # เมื่อ Logout สำเร็จจะเปลี่ยนเส้นทางไปหน้าแรก
-
-# Allauth specific settings
-SITE_ID = 1 # <--- สำคัญสำหรับ allauth (ต้องมี)
-
-ACCOUNT_LOGIN_METHODS = {'email', 'username'}  # ใช้ได้หลายวิธี
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']  # * คือบังคับกรอก
-ACCOUNT_SIGNUP_EMAIL_ENTER_UNIQUE = True # อีเมลต้องไม่ซ้ำกัน
-ACCOUNT_LOGOUT_ON_GET = True # ทำให้ Logout ง่ายขึ้น (คลิกแล้วออกเลย)
-ACCOUNT_EMAIL_VERIFICATION = 'none' # หรือ 'mandatory' ถ้าต้องการยืนยันอีเมล
-
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+# Allauth specific settings
+SITE_ID = 1
+
+ACCOUNT_LOGIN_METHODS = {'email', 'username'}
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+ACCOUNT_SIGNUP_EMAIL_ENTER_UNIQUE = True
+ACCOUNT_LOGOUT_ON_GET = True
+ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 # Crispy Forms setting
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -156,8 +158,8 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'APP': {
-            'client_id': os.environ.get('GOOGLE_CLIENT_ID'), # <--- อ่านจาก Environment Variable
-            'secret': os.environ.get('GOOGLE_SECRET'), # <--- อ่านจาก Environment Variable
+            'client_id': os.environ.get('GOOGLE_CLIENT_ID'),
+            'secret': os.environ.get('GOOGLE_SECRET'),
             'key': ''
         },
         'SCOPE': [
@@ -170,5 +172,7 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('GOOGLE_CLIENT_ID')
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('GOOGLE_CLIENT_SECRET')
+# CORRECTED: These lines were causing an issue or are redundant if using allauth's socialaccount providers
+# If you are using django-allauth, it handles Google OAuth itself through the SOCIALACCOUNT_PROVIDERS setting.
+# SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('GOOGLE_CLIENT_ID') # REMOVED/CORRECTED
+# SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('GOOGLE_CLIENT_SECRET') # REMOVED/CORRECTED
