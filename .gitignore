@@ -1,0 +1,23 @@
+# Virtual environment
+venv/
+*.env # <--- สำคัญมาก! ห้าม push ไฟล์ .env ขึ้น Git
+.vscode/ # ไม่ต้องติดตาม config ของ VS Code (แล้วแต่ชอบ)
+
+# Python
+__pycache__/
+*.pyc
+*.sqlite3 # <--- ไม่ต้อง push database ขึ้น Git
+*.log
+
+# Docker
+.dockerignore # มักจะซ้ำกับ .gitignore บางส่วน
+docker-compose.override.yml # ถ้ามี (ใช้สำหรับ dev settings ส่วนตัว)
+
+# Media files
+media/ # <--- ไม่ต้อง push รูปภาพที่อัปโหลดขึ้น Git
+
+# Django specific
+*.pot
+*.mo
+*.po
+local_settings.py

@@ -1,0 +1,10 @@
+Django>=4.2.1
+Pillow
+django-allauth
+django-crispy-forms
+crispy_bootstrap5
+python-dotenv
+requests
+jwt
+libscrc 
+qrcode
